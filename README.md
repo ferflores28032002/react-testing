@@ -1,140 +1,71 @@
-# 🏔️ Sistema de Cronograma de Supervisores Mineros
+# Sistema de Cronograma de Supervisores Mineros
 
-Sistema inteligente para la planificación automática de turnos de supervisores de perforación en operaciones mineras, desarrollado con React + TypeScript + Zustand.
+Este proyecto es una aplicacion web desarrollada con React, TypeScript y Vite para generar y visualizar cronogramas de turnos para supervisores de perforacion minera. El sistema asegura que se cumplan las reglas de cobertura operativa mediante un algoritmo de planificacion.
 
-## 🎯 Características
+## Proposito del Proyecto
 
-- ✅ **Algoritmo Inteligente**: Generación automática de cronogramas cumpliendo reglas de negocio complejas
-- ✅ **Validación en Tiempo Real**: Detección y reporte de conflictos en el cronograma
-- ✅ **Interfaz Profesional**: UI moderna y responsiva con Tailwind CSS
-- ✅ **Gestión de Estado**: Zustand + Immer para estado predecible e inmutable
-- ✅ **Arquitectura Escalable**: Atomic Design + Feature-based structure
-- ✅ **Type-Safe**: TypeScript con enums y tipos estrictos
-- ✅ **Notificaciones**: Sistema de alertas con Sonner
+El objetivo principal es resolver el problema de programacion de turnos donde se requiere mantener una cobertura continua de supervision en campo. El sistema calcula automaticamente los dias de trabajo, descanso, induccion y viajes para tres supervisores, asegurando que siempre haya la cantidad requerida de personal activo.
 
-## 🏗️ Arquitectura
+## Logica del Generador de Cronogramas
 
-```
-src/
-├── core/
-│   ├── components/
-│   │   ├── atoms/          # Componentes básicos reutilizables
-│   │   ├── molecules/      # Combinaciones de átomos
-│   │   └── organisms/      # Componentes complejos
-│   ├── store/              # Estado global con Zustand
-│   └── types/              # Tipos y enums compartidos
-└── features/
-    └── schedule/
-        ├── components/     # Componentes específicos del feature
-        ├── helpers/        # Funciones auxiliares
-        ├── hooks/          # Custom hooks
-        └── utils/          # Lógica de negocio
-            ├── supervisorFactory.ts      # Factory de supervisores
-            ├── activityMapper.ts         # Mapeo de actividades
-            ├── phaseTransitions.ts       # Transiciones de fase (Strategy Pattern)
-            ├── scheduleAdjuster.ts       # Ajustes de cronograma
-            ├── scheduleGenerator.ts      # Orquestador principal
-            └── scheduleValidator.ts      # Validación de reglas
-```
+El nucleo de la aplicacion es el algoritmo de generacion de cronogramas, ubicado en el directorio features/schedule/utils. El proceso sigue estos pasos logicos:
 
-## 📋 Reglas de Negocio
+### 1. Inicializacion del Estado
 
-### Reglas Fundamentales
-1. Siempre debe haber **EXACTAMENTE 2 supervisores perforando**
-2. **NUNCA** deben estar 3 supervisores perforando al mismo tiempo
-3. **NUNCA** debe haber solo 1 supervisor perforando (una vez que S3 entró)
-4. El Supervisor 1 (S1) **SIEMPRE** cumple el régimen completo sin modificaciones
-5. Los Supervisores 2 y 3 (S2, S3) se ajustan para cumplir las reglas
+Se crean tres estados de supervisor independientes.
+- El Supervisor 1 inicia inmediatamente en la fase de Subida (viaje al campo).
+- Los Supervisores 2 y 3 inician en una fase de Espera, inactivos hasta que las reglas del negocio requieran su presencia.
 
-### Ciclo de un Supervisor
-- **S** = Subida (viaje al campo) - siempre 1 día
-- **I** = Inducción (capacitación) - configurable (1 a 5 días)
-- **P** = Perforación (trabajo efectivo)
-- **B** = Bajada (retorno) - siempre 1 día
-- **D** = Descanso
+### 2. Simulacion Dia a Dia
 
-### Régimen Variable (NxM)
-- **N** = Días de trabajo (subida + inducción si aplica + perforación)
-- **M** = Días libres (bajada + descanso)
-- Días de descanso REAL = M - 2 (restando subida y bajada)
+El sistema itera dia por dia hasta alcanzar el numero de dias de simulacion configurado (por defecto 360 dias).
 
-## 🚀 Instalación y Uso
+En cada ciclo diario ocurren los siguientes eventos:
 
-```bash
-# Instalar dependencias
+A. Activacion del Supervisor 2
+En el dia 2 de la simulacion, el Supervisor 2 entra automaticamente en fase de Subida. Esto se hace para escalonar los turnos y evitar que todos los supervisores entren y salgan al mismo tiempo.
+
+B. Calculo de Actividades Actuales
+Para cada supervisor, se determina su actividad del dia basandose en su fase actual:
+- Subida (S): Viaje hacia la mina.
+- Induccion (I): Capacitacion en sitio (dias configurables).
+- Perforacion (P): Trabajo operativo efectivo.
+- Bajada (B): Viaje de retorno.
+- Descanso (D): Dias libres fuera de mina.
+- Inactivo (-): Aun no ha entrado al ciclo.
+
+C. Activacion Dinamica del Supervisor 3
+El algoritmo monitorea cuantos supervisores estan en fase de perforacion (trabajo efectivo). Si detecta que solo hay 1 supervisor perforando y el Supervisor 3 aun esta en espera, activa inmediatamente al Supervisor 3 (fase de Subida) para cubrir la brecha operativa.
+
+D. Transicion de Fases
+Al finalizar el dia, cada supervisor activo avanza su estado interno. Si ha completado la duracion de su fase actual (por ejemplo, cumplio sus dias de trabajo o descanso), transiciona a la siguiente fase del ciclo:
+Subida -> Induccion (si aplica) -> Perforacion -> Bajada -> Descanso -> Subida...
+
+### 3. Ajustes Posteriores
+
+Una vez generada la simulacion base, se ejecuta una pasada de ajustes (applyScheduleAdjustments) para refinar el cronograma y resolver conflictos menores que no pudieron ser manejados durante la simulacion lineal.
+
+## Requisitos Previos
+
+- Node.js (version LTS recomendada)
+- pnpm (gestor de paquetes)
+
+## Instalacion y Ejecucion
+
+Sigue estos pasos para levantar el proyecto en tu entorno local:
+
+1. Instalar dependencias
+Ejecuta el siguiente comando en la raiz del proyecto para descargar todas las librerias necesarias:
 pnpm install
 
-# Desarrollo
+2. Servidor de Desarrollo
+Para iniciar la aplicacion en modo de desarrollo con recarga en caliente (HMR):
 pnpm run dev
 
-# Build de producción
+3. Construccion para Produccion
+Para generar los archivos estaticos optimizados para despliegue:
 pnpm run build
 
-# Preview de producción
+4. Previsualizar Produccion
+Para probar localmente la version construida:
 pnpm run preview
-```
-
-## 🛠️ Stack Tecnológico
-
-- **React 19** - UI Library
-- **TypeScript** - Type Safety
-- **Vite** - Build Tool
-- **Tailwind CSS 4** - Styling
-- **Zustand** - State Management
-- **Immer** - Immutable State
-- **Sonner** - Toast Notifications
-- **React Router DOM** - Routing
-
-## 💡 Patrones de Diseño Implementados
-
-- **Strategy Pattern**: Para transiciones de fase de supervisores
-- **Factory Pattern**: Para creación de estados de supervisores
-- **Observer Pattern**: A través de Zustand para gestión de estado
-- **Atomic Design**: Para organización de componentes UI
-- **Feature-Sliced Design**: Para estructura de features
-
-## 📊 Ejemplo de Uso
-
-1. Configura los parámetros del régimen:
-   - Días de trabajo (N)
-   - Días libres totales (M)
-   - Días de inducción
-
-2. Haz clic en "Generar Cronograma"
-
-3. Revisa el cronograma generado y las validaciones
-
-4. Si hay errores, el sistema los mostrará con detalles específicos
-
-## 🎨 Características de UI
-
-- Diseño moderno con gradientes y sombras
-- Animaciones suaves y transiciones
-- Responsive design para todos los dispositivos
-- Feedback visual inmediato
-- Estados de carga y error bien definidos
-- Accesibilidad considerada
-
-## 📝 Notas Técnicas
-
-- Sin comentarios en el código (código auto-documentado)
-- Enums en lugar de string literals
-- Separación clara de responsabilidades
-- Funciones puras donde sea posible
-- Código profesional de nivel senior
-- Zero dependencias innecesarias
-
-## 🔍 Validaciones Implementadas
-
-- ✅ Detección de solo 1 supervisor perforando (cuando S3 está activo)
-- ✅ Detección de 3 supervisores perforando simultáneamente
-- ✅ Validación de días mínimos de perforación por ciclo (mínimo 3 días)
-- ✅ Ajuste automático de S2 para mantener 2 supervisores perforando
-
-## 📄 Licencia
-
-MIT
-
----
-
-**Desarrollado con ❤️ para operaciones mineras eficientes**
