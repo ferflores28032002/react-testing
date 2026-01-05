@@ -1,5 +1,7 @@
 import { Card } from '../atoms/Card';
 import { Button } from '../atoms/Button';
+import { ChunkHeader } from '../molecules/ChunkHeader';
+import { DaysGrid } from '../molecules/DaysGrid';
 import { SupervisorRow } from '../molecules/SupervisorRow';
 import type { DayActivity, ScheduleConfig } from '../../types/schedule.types';
 import { useScheduleView, SUPERVISORS } from '../../../features/schedule/hooks/useScheduleView';
@@ -35,26 +37,12 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
           const startDay = days[0];
           const endDay = days[days.length - 1];
           
-          return (
             <div key={chunkIndex} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 md:p-6">
-              <div className="flex items-center justify-between mb-3 md:mb-4">
-                <h4 className="text-xs md:text-sm font-bold text-gray-700 uppercase tracking-wider">
-                  Días {startDay} - {endDay}
-                </h4>
-              </div>
+              <ChunkHeader startDay={startDay} endDay={endDay} />
 
               <div className="overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
                 <div className="min-w-max space-y-3 md:space-y-4">
-                  <div className="grid gap-2 md:gap-4 items-center" style={{ gridTemplateColumns: '150px repeat(15, 1fr)' }}>
-                    <div className="bg-white px-2 md:px-3 py-1.5 md:py-2 rounded-lg border border-gray-200">
-                      <span className="text-xs md:text-sm font-bold text-gray-900">Día</span>
-                    </div>
-                    {days.map(day => (
-                      <div key={day} className="bg-white px-2 md:px-3 py-1.5 md:py-2 rounded text-center border border-gray-200">
-                        <span className="text-[10px] md:text-xs font-semibold text-gray-700">{day}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <DaysGrid days={days} />
 
                   {SUPERVISORS.map(({ key, nameKey, defaultName }) => (
                     <SupervisorRow
