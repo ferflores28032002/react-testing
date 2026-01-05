@@ -34,7 +34,7 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
 
               <div className="overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
                 <div className="min-w-max space-y-3 md:space-y-4">
-                  <div className="grid gap-2 md:gap-4 items-center" style={{ gridTemplateColumns: '100px repeat(15, 1fr)' }}>
+                  <div className="grid gap-2 md:gap-4 items-center" style={{ gridTemplateColumns: '150px repeat(15, 1fr)' }}>
                     <div className="bg-white px-2 md:px-3 py-1.5 md:py-2 rounded-lg border border-gray-200">
                       <span className="text-xs md:text-sm font-bold text-gray-900">Día</span>
                     </div>

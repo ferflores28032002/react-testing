@@ -2,7 +2,7 @@ import { ActivityType, SupervisorKey, ValidationErrorType, type DayActivity, typ
 
 export const validateSchedule = (
   schedule: DayActivity[],
-  _config: ScheduleConfig
+  config: ScheduleConfig
 ): { errors: ValidationError[]; isValid: boolean } => {
   const errors: ValidationError[] = [];
 
@@ -30,7 +30,21 @@ export const validateSchedule = (
     }
   });
 
+  const getSupervisorName = (key: SupervisorKey): string => {
+    switch (key) {
+      case SupervisorKey.SUPERVISOR_1:
+        return config.supervisor1Name || 'Supervisor 1';
+      case SupervisorKey.SUPERVISOR_2:
+        return config.supervisor2Name || 'Supervisor 2';
+      case SupervisorKey.SUPERVISOR_3:
+        return config.supervisor3Name || 'Supervisor 3';
+      default:
+        return key;
+    }
+  };
+
   const validateMinimumDrilling = (supervisor: SupervisorKey) => {
+    const supervisorName = getSupervisorName(supervisor);
     let consecutiveDrilling = 0;
     let cycleStart = -1;
 
@@ -45,7 +59,7 @@ export const validateSchedule = (
           errors.push({
             day: cycleStart,
             type: ValidationErrorType.INSUFFICIENT_DRILLING,
-            message: `${supervisor.toUpperCase()}: Solo ${consecutiveDrilling} día(s) de perforación (mínimo 3)`,
+            message: `${supervisorName}: Solo ${consecutiveDrilling} día(s) de perforación (mínimo 3) desde el día ${cycleStart}`,
           });
         }
         consecutiveDrilling = 0;
@@ -56,7 +70,7 @@ export const validateSchedule = (
       errors.push({
         day: cycleStart,
         type: ValidationErrorType.INSUFFICIENT_DRILLING,
-        message: `${supervisor.toUpperCase()}: Solo ${consecutiveDrilling} día(s) de perforación (mínimo 3)`,
+        message: `${supervisorName}: Solo ${consecutiveDrilling} día(s) de perforación (mínimo 3) desde el día ${cycleStart}`,
       });
     }
   };

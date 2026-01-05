@@ -19,7 +19,7 @@ export const SupervisorRow = ({
   getActivityTooltip
 }: SupervisorRowProps) => {
   return (
-    <div className="grid gap-2 md:gap-4 items-center" style={{ gridTemplateColumns: '100px repeat(15, 1fr)' }}>
+    <div className="grid gap-2 md:gap-4 items-center" style={{ gridTemplateColumns: '150px repeat(15, 1fr)' }}>
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-2 md:px-3 py-1.5 md:py-2 rounded-lg overflow-hidden">
         <span className="text-[10px] md:text-sm font-bold text-white block truncate">{supervisorName}</span>
       </div>
