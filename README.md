@@ -20,7 +20,7 @@ Se crean tres estados de supervisor independientes.
 
 ### 2. Simulacion Dia a Dia
 
-El sistema itera dia por dia hasta alcanzar el numero de dias de simulacion configurado (por defecto 360 dias).
+El sistema itera dia por dia hasta alcanzar el numero de dias de simulacion configurado.
 
 En cada ciclo diario ocurren los siguientes eventos:
 
