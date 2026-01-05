@@ -2,7 +2,7 @@
 
 Este proyecto es una aplicacion web desarrollada con React, TypeScript y Vite para generar y visualizar cronogramas de turnos para supervisores de perforacion minera. El sistema asegura que se cumplan las reglas de cobertura operativa mediante un algoritmo de planificacion.
 
-Demo en vivo: https://react-testing-schedule.netlify.app
+Demo en vivo: https://mining-project-testing.netlify.app/
 
 ## Proposito del Proyecto
 
