@@ -1,6 +1,7 @@
 import { Card } from '../atoms/Card';
 import { Button } from '../atoms/Button';
 import { ChunkHeader } from '../molecules/ChunkHeader';
+import { CompactViewHeader } from '../molecules/CompactViewHeader';
 import { DaysGrid } from '../molecules/DaysGrid';
 import { SupervisorRow } from '../molecules/SupervisorRow';
 import type { DayActivity, ScheduleConfig } from '../../types/schedule.types';
@@ -18,10 +19,7 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
   return (
     <Card className="p-4 md:p-8 border-0">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6 gap-4">
-        <div>
-          <h3 className="text-xl md:text-2xl font-bold text-gray-900">Vista Compacta del Cronograma</h3>
-          <p className="text-sm md:text-base text-gray-600 mt-1">Visualización horizontal por bloques de 15 días</p>
-        </div>
+        <CompactViewHeader />
         <Button
           onClick={() => config && generateSchedulePdf(schedule, config)}
           variant="danger"
@@ -37,6 +35,7 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
           const startDay = days[0];
           const endDay = days[days.length - 1];
           
+          return (
             <div key={chunkIndex} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 md:p-6">
               <ChunkHeader startDay={startDay} endDay={endDay} />
 
