@@ -2,6 +2,8 @@
 
 Este proyecto es una aplicacion web desarrollada con React, TypeScript y Vite para generar y visualizar cronogramas de turnos para supervisores de perforacion minera. El sistema asegura que se cumplan las reglas de cobertura operativa mediante un algoritmo de planificacion.
 
+Demo en vivo: https://react-testing-schedule.netlify.app
+
 ## Proposito del Proyecto
 
 El objetivo principal es resolver el problema de programacion de turnos donde se requiere mantener una cobertura continua de supervision en campo. El sistema calcula automaticamente los dias de trabajo, descanso, induccion y viajes para tres supervisores, asegurando que siempre haya la cantidad requerida de personal activo.
@@ -45,6 +47,38 @@ Subida -> Induccion (si aplica) -> Perforacion -> Bajada -> Descanso -> Subida..
 
 Una vez generada la simulacion base, se ejecuta una pasada de ajustes (applyScheduleAdjustments) para refinar el cronograma y resolver conflictos menores que no pudieron ser manejados durante la simulacion lineal.
 
+## Justificacion del Algoritmo
+
+Se eligio un enfoque de simulacion dia a dia (Day-by-Day Simulation) en lugar de una formula matematica estatica por varias razones clave:
+
+1. Manejo de Estado y Contexto
+Las reglas del negocio no son puramente ciclicas; dependen del estado de los otros supervisores. Por ejemplo, la entrada del Supervisor 3 depende explicitamente de que exista una brecha en la cobertura de perforacion. Una simulacion permite que los "agentes" (supervisores) reaccionen al estado del sistema en tiempo real.
+
+2. Flexibilidad ante Cambios
+Las operaciones mineras a menudo cambian sus requisitos (dias de induccion variables, cambios en los dias de viaje). Un algoritmo basado en maquinas de estados finitos es mas facil de adaptar a estas nuevas reglas que recalcular una ecuacion compleja de desplazamiento de turnos.
+
+3. Deteccion de Conflictos
+Al simular dia por dia, podemos identificar exactamente en que momento se rompen las reglas (ej. tres personas perforando) y registrar esos errores con precision para el usuario final.
+
+## Seleccion de Tecnologias
+
+Las decisiones tecnologicas se tomaron para priorizar la seguridad de tipos, la mantenibilidad y la experiencia de usuario:
+
+React y Atomic Design
+Se utilizo una arquitectura de componentes atomica para asegurar que la interfaz sea consistente y modular. Componentes pequenos como las celdas de la tabla (Atoms) se componen para formar las filas (Molecules) y la tabla completa (Organisms), facilitando la reutilizacion y las pruebas.
+
+TypeScript
+Dado que el cronograma depende de multiples estados (Subida, Bajada, Perforacion, etc.), el uso de TypeScript es fundamental para evitar errores logicos. Los Enums y Tipos estrictos aseguran que nunca se asigne un estado invalido a un supervisor durante la simulacion.
+
+Zustand e Immer
+Para el manejo del estado global, seleccionamos Zustand por su simplicidad y bajo peso en comparacion con Redux. Lo combinamos con Immer para permitir mutaciones inmutables del estado, lo cual simplifica drasticamente la logica de actualizacion de configuraciones complejas y arrays de cronogramas.
+
+Tailwind CSS
+Para la estilizacion, Tailwind permite iterar rapidamente sobre el diseño visual sin salir del archivo del componente. Esto es crucial para ajustar la grilla del cronograma y asegurar que sea responsiva en diferentes tamaños de pantalla.
+
+jsPDF y autoTable
+La generacion de reportes se realiza completamente en el cliente (Browser-side) para evitar costos de servidor y latencia. Elegimos jsPDF en combinacion con el plugin autoTable porque ofrecen el mayor control programatico para dibujar tablas complejas con celdas coloreadas que coincidan visualmente con la interfaz de usuario.
+
 ## Requisitos Previos
 
 - Node.js (version LTS recomendada)
@@ -69,3 +103,18 @@ pnpm run build
 4. Previsualizar Produccion
 Para probar localmente la version construida:
 pnpm run preview
+
+## Despliegue en Netlify
+
+Este proyecto esta optimizado para ser desplegado en la plataforma Netlify.
+
+Pasos para desplegar:
+
+1. Conecta tu repositorio de GitHub a Netlify.
+2. Selecciona este repositorio.
+3. En la configuracion de construccion, usa los siguientes parametros:
+   - Build command: pnpm run build
+   - Publish directory: dist
+4. Despliega el sitio.
+
+La aplicacion es una Single Page Application (SPA), por lo que Netlify manejara el enrutamiento y el servido de los archivos estaticos generados en la carpeta dist.
