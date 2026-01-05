@@ -18,7 +18,7 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
 
   return (
     <Card className="p-4 md:p-8 border-0">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6 gap-4">
+      <div className="flex flex-col items-start md:flex-row md:items-center justify-between mb-4 md:mb-6 gap-4">
         <CompactViewHeader />
         <Button
           onClick={() => config && generateSchedulePdf(schedule, config)}
