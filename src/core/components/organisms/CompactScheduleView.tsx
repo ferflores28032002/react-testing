@@ -1,7 +1,9 @@
 import { Card } from '../atoms/Card';
+import { Button } from '../atoms/Button';
 import { SupervisorRow } from '../molecules/SupervisorRow';
 import type { DayActivity, ScheduleConfig } from '../../types/schedule.types';
 import { useScheduleView, SUPERVISORS } from '../../../features/schedule/hooks/useScheduleView';
+import { generateSchedulePdf } from '../../../features/schedule/utils/generatePdf';
 
 interface CompactScheduleViewProps {
   schedule: DayActivity[];
@@ -13,9 +15,23 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
 
   return (
     <Card className="p-4 md:p-8 border-0">
-      <div className="mb-4 md:mb-6">
-        <h3 className="text-xl md:text-2xl font-bold text-gray-900">Vista Compacta del Cronograma</h3>
-        <p className="text-sm md:text-base text-gray-600 mt-1">Visualización horizontal por bloques de 15 días</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 md:mb-6 gap-4">
+        <div>
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900">Vista Compacta del Cronograma</h3>
+          <p className="text-sm md:text-base text-gray-600 mt-1">Visualización horizontal por bloques de 15 días</p>
+        </div>
+        <Button
+          onClick={() => config && generateSchedulePdf(schedule, config)}
+          variant="danger"
+          className="flex items-center gap-2 shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Descargar PDF
+        </Button>
       </div>
 
       <div className="space-y-6 md:space-y-8">
