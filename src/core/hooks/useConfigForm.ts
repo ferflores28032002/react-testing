@@ -24,10 +24,15 @@ export const useConfigForm = ({ config, onConfigChange, onGenerate }: UseConfigF
   const values = watch();
 
   const summary = useMemo(() => {
-    const workDays = values.workDays ?? config.workDays;
-    const totalRestDays = values.totalRestDays ?? config.totalRestDays;
-    const inductionDays = values.inductionDays ?? config.inductionDays;
-    const realRestDays = (totalRestDays || 0) - 2;
+    const safeValue = (val: number | undefined, fallback: number) => {
+      if (val === undefined || val === null || Number.isNaN(val)) return fallback;
+      return val;
+    };
+
+    const workDays = safeValue(values.workDays, config.workDays);
+    const totalRestDays = safeValue(values.totalRestDays, config.totalRestDays);
+    const inductionDays = safeValue(values.inductionDays, config.inductionDays);
+    const realRestDays = totalRestDays - 2;
 
     return {
       workDays,
