@@ -4,7 +4,7 @@ type PhaseTransitionHandler = (supervisor: SupervisorState, config: ScheduleConf
 
 const transitionFromWaiting: PhaseTransitionHandler = () => false;
 
-const transitionFromAscending: PhaseTransitionHandler = (supervisor, _config) => {
+const transitionFromAscending: PhaseTransitionHandler = (supervisor) => {
   if (supervisor.daysInPhase < 1) return false;
   
   supervisor.phase = supervisor.cycleNumber === 0 
