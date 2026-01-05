@@ -39,7 +39,7 @@ export const CompactScheduleView = ({ schedule, config }: CompactScheduleViewPro
             <div key={chunkIndex} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3 md:p-6">
               <ChunkHeader startDay={startDay} endDay={endDay} />
 
-              <div className="overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+              <div className="overflow-x-auto overflow-y-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <div className="min-w-max space-y-3 md:space-y-4">
                   <DaysGrid days={days} />
 
