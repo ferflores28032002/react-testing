@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -16,14 +17,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
-          className={`w-full px-4 py-2.5 rounded-lg border ${
-            error ? 'border-red-500' : 'border-gray-200'
-          } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${className}`}
+          className={`w-full px-4 py-2.5 rounded-lg border ${error ? 'border-red-500' : 'border-gray-200'
+            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${className}`}
           {...props}
         />
         {error && (
-          <p className="mt-1 text-sm text-red-600">{error}</p>
-        )}
+          <FormErrorMessage
+            message={error}
+          />)}
       </div>
     );
   }

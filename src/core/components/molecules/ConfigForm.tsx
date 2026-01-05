@@ -1,7 +1,6 @@
 import { useFormContext } from 'react-hook-form';
-import { Input } from '../atoms/Input';
 import type { ConfigFormData } from '../../schemas/configSchema';
-import { FormErrorMessage } from '../atoms/FormErrorMessage';
+import { Input } from '../atoms/Input';
 
 export const ConfigForm = () => {
   const {
@@ -19,12 +18,8 @@ export const ConfigForm = () => {
             {...register('workDays', { valueAsNumber: true })}
             min={1}
             max={30}
+            error={errors.workDays?.message}
           />
-          {errors.workDays && (
-            <FormErrorMessage
-              message={errors.workDays.message}
-            />
-          )}
         </div>
 
         <div>
@@ -34,12 +29,8 @@ export const ConfigForm = () => {
             {...register('totalRestDays', { valueAsNumber: true })}
             min={2}
             max={20}
+            error={errors.totalRestDays?.message}
           />
-          {errors.totalRestDays && (
-            <FormErrorMessage
-              message={errors.totalRestDays.message}
-            />
-          )}
         </div>
 
         <div>
@@ -49,12 +40,8 @@ export const ConfigForm = () => {
             {...register('inductionDays', { valueAsNumber: true })}
             min={1}
             max={5}
+            error={errors.inductionDays?.message}
           />
-          {errors.inductionDays && (
-            <FormErrorMessage
-              message={errors.inductionDays.message}
-            />
-          )}
         </div>
 
         <div>
@@ -64,12 +51,8 @@ export const ConfigForm = () => {
             {...register('simulationDays', { valueAsNumber: true })}
             min={7}
             max={90}
+            error={errors.simulationDays?.message}
           />
-          {errors.simulationDays && (
-            <FormErrorMessage
-              message={errors.simulationDays.message}
-            />
-          )}
         </div>
       </div>
 
@@ -82,12 +65,8 @@ export const ConfigForm = () => {
               label="Supervisor 1"
               {...register('supervisor1Name')}
               placeholder="Nombre del supervisor 1"
+              error={errors.supervisor1Name?.message}
             />
-            {errors.supervisor1Name && (
-              <FormErrorMessage
-                message={errors.supervisor1Name.message}
-              />
-            )}
           </div>
           <div>
             <Input
@@ -95,12 +74,8 @@ export const ConfigForm = () => {
               label="Supervisor 2"
               {...register('supervisor2Name')}
               placeholder="Nombre del supervisor 2"
+              error={errors.supervisor2Name?.message}
             />
-            {errors.supervisor2Name && (
-              <FormErrorMessage
-                message={errors.supervisor2Name.message}
-              />
-            )}
           </div>
           <div>
             <Input
@@ -108,12 +83,8 @@ export const ConfigForm = () => {
               label="Supervisor 3"
               {...register('supervisor3Name')}
               placeholder="Nombre del supervisor 3"
+              error={errors.supervisor3Name?.message}
             />
-            {errors.supervisor3Name && (
-              <FormErrorMessage
-                message={errors.supervisor3Name.message}
-              />
-            )}
           </div>
         </div>
       </div>

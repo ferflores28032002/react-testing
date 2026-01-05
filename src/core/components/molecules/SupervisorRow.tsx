@@ -1,5 +1,4 @@
-import { Tooltip } from '../atoms/Tooltip';
-import type { DayActivity, ActivityType } from '../../types/schedule.types';
+import type { ActivityType, DayActivity } from '../../types/schedule.types';
 
 interface SupervisorRowProps {
   supervisorKey: 'supervisor1' | 'supervisor2' | 'supervisor3';
@@ -16,7 +15,6 @@ export const SupervisorRow = ({
   chunk,
   formatActivity,
   getActivityBgClass,
-  getActivityTooltip
 }: SupervisorRowProps) => {
   return (
     <div className="grid gap-2 md:gap-4 items-center" style={{ gridTemplateColumns: '150px repeat(15, 1fr)' }}>
@@ -26,19 +24,14 @@ export const SupervisorRow = ({
       {chunk.map((day, dayIdx) => {
         const activity = day[supervisorKey];
         return (
-          <Tooltip
-            key={dayIdx}
-            position='top'
-            content={getActivityTooltip(activity, day.day, supervisorName)}
-          >
             <div
+            key={dayIdx}
               className={`${getActivityBgClass(activity)} px-2 md:px-3 py-1.5 md:py-2 rounded flex items-center justify-center transition-all hover:scale-105 cursor-pointer`}
             >
               <span className="text-[10px] md:text-xs font-bold text-white">
                 {formatActivity(activity)}
               </span>
             </div>
-          </Tooltip>
         );
       })}
     </div>
