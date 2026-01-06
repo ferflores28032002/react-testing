@@ -5,6 +5,7 @@ import { CompactScheduleView } from '../../../core/components/organisms/CompactS
 import { Legend } from '../../../core/components/organisms/Legend';
 import { ErrorList } from '../../../core/components/molecules/ErrorList';
 import { EmptyStateCard } from './EmptyStateCard';
+import { SectionHeader } from './SectionHeader';
 
 export const ScheduleView = () => {
   const { config, schedule, errors, setConfig, generateSchedule, reset } = useSchedule();
@@ -33,14 +34,11 @@ export const ScheduleView = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: '#006bff' }}>
-            Algoritmo de Cronograma de Supervisores
-          </h1>
-          <p className="text-sm md:text-base text-gray-600 max-w-3xl mx-auto">
-            Sistema inteligente para la planificación automática de turnos de supervisores de perforación minera
-          </p>
-        </div>
+        <SectionHeader
+          title="Algoritmo de Cronograma de Supervisores"
+          subtitle="Sistema inteligente para la planificación automática de turnos de supervisores de perforación minera"
+        />
+
 
         <div className="space-y-6 mb-6">
           <ConfigPanel
