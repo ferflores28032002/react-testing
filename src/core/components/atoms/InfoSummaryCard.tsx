@@ -43,7 +43,7 @@ export function InfoSummaryCard({
 
     return (
         <div
-            className={`border-l-4 p-4 rounded-lg ${styles.container} ${className}`}
+            className={` p-4 rounded-lg ${styles.container} ${className}`}
         >
             <h3 className={`text-sm font-semibold ${styles.title}`}>
                 {title}
